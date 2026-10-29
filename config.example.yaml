@@ -1,0 +1,25 @@
+# 複製成 config.yaml 後修改。未列出的欄位使用預設值 (見 the_vision/config.py)。
+
+camera:
+  # RTSP 網址 / USB 攝影機編號 / 影片檔路徑
+  source: "rtsp://帳號:密碼@192.168.1.100:554/stream1"
+  burst_frames: 5          # 每次辨識連拍張數 (用來判斷動作幅度)
+  burst_interval_sec: 0.4
+
+detector:
+  pose_model: yolo11n-pose.pt   # 有 GPU 可改 yolo11m-pose.pt 提高準確度
+  object_model: yolo11s.pt
+  device: ""                    # "" 自動 / "cpu" / "0"
+  img_size: 1280
+
+interval_sec: 30           # 每 30 秒辨識一次
+save_snapshots: alerts     # all / alerts / none
+alert_cooldown_sec: 120
+
+rules:
+  sleep_head_height: 0.15  # 頭部低於此高度 (肩寬單位) 視為趴睡
+  turn_head_offset: 0.45   # 轉頭幅度超過此值視為分心
+  active_motion: 0.6       # 連拍間動作超過此值視為動作過大
+  phone_ratio: 0.3         # 連拍中至少 30% 偵測到手機在手上
+
+port: 8000

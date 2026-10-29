@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}即時看板{% endblock %}
+{% block content %}
+<section class="panel control">
+  <div id="idle-controls" class="row">
+    <input id="title" placeholder="課堂名稱 (預設為日期時間)">
+    <button id="start" class="primary">開始本堂監看</button>
+  </div>
+  <div id="run-controls" class="row" hidden>
+    <span class="live-dot"></span>
+    <strong id="session-title"></strong>
+    <span id="countdown" class="muted"></span>
+    <button id="stop" class="danger">結束本堂課</button>
+    <a id="report-link" class="button ghost">查看報表</a>
+  </div>
+  <p id="control-msg" class="msg"></p>
+</section>
+
+<div class="dash">
+  <section class="panel">
+    <h2>最新畫面 <span id="tick-time" class="muted"></span></h2>
+    <div class="stage" id="stage">
+      <div class="stage-inner">
+        <img id="snapshot" alt="最新辨識畫面">
+        <svg id="overlay"></svg>
+      </div>
+      <div class="stage-msg" id="stage-msg">尚未開始監看</div>
+    </div>
+    <div class="legend" id="legend"></div>
+  </section>
+  <aside class="panel">
+    <h2>危險 / 異常警示</h2>
+    <ul id="alerts" class="alerts"><li class="muted">目前沒有警示</li></ul>
+  </aside>
+</div>
+
+<section class="panel">
+  <h2>學生狀態</h2>
+  <div id="cards" class="cards"></div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='dashboard.js') }}"></script>{% endblock %}

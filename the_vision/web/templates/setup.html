@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}框選座位{% endblock %}
+{% block content %}
+<div class="setup">
+  <section class="panel stage-panel">
+    <div class="toolbar">
+      <div class="seg" role="group" aria-label="框選模式">
+        <button data-mode="seat" class="on">框座位 (學生)</button>
+        <button data-mode="ignore">框忽略區 (講台等)</button>
+      </div>
+      <button id="reload">重新擷取畫面</button>
+      <span class="hint">在畫面上拖曳框出每位學生上半身與桌面的範圍，放開後輸入姓名。點選框可修改或刪除。</span>
+    </div>
+    <div class="stage" id="stage">
+      <div class="stage-inner">
+        <img id="frame" alt="監視器畫面">
+        <canvas id="canvas"></canvas>
+      </div>
+      <div class="stage-msg" id="stage-msg">載入畫面中…</div>
+    </div>
+  </section>
+  <aside class="panel side">
+    <h2>學生座位 <span class="count" id="seat-count">0</span></h2>
+    <ol id="seat-list" class="seat-list"></ol>
+    <h2>忽略區 <span class="count" id="ignore-count">0</span></h2>
+    <p class="hint">忽略區內的人 (例如講台上的老師) 不會被當成離座學生。</p>
+    <ol id="ignore-list" class="seat-list"></ol>
+    <div class="actions">
+      <button id="clear" class="ghost">全部清除</button>
+      <button id="save" class="primary">儲存座位</button>
+    </div>
+    <p id="save-msg" class="msg"></p>
+  </aside>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='setup.js') }}"></script>{% endblock %}

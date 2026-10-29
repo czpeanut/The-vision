@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}自習課監看{% endblock %} · The Vision</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/">The Vision <small>自習課監看</small></a>
+    <nav>
+      <a href="/" class="{{ 'on' if request.path == '/' }}">即時看板</a>
+      <a href="/setup" class="{{ 'on' if request.path == '/setup' }}">框選座位</a>
+      <a href="/reports" class="{{ 'on' if request.path.startswith('/report') }}">課後報表</a>
+    </nav>
+  </header>
+  <main>{% block content %}{% endblock %}</main>
+  <script>
+    window.STATUSES = {{ statuses | tojson }};
+    window.INTERVAL = {{ interval | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='common.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

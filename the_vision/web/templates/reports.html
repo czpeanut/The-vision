@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}課後報表{% endblock %}
+{% block content %}
+<section class="panel">
+  <h2>歷史課堂</h2>
+  {% if sessions %}
+  <table class="table">
+    <thead><tr><th>課堂</th><th>開始</th><th>結束</th><th></th></tr></thead>
+    <tbody>
+    {% for s in sessions %}
+      <tr>
+        <td><a href="/report/{{ s.id }}">{{ s.title }}</a></td>
+        <td>{{ fmt(s.started_at) }}</td>
+        <td>{{ fmt(s.ended_at) if s.ended_at else "進行中" }}</td>
+        <td><a href="/report/{{ s.id }}.csv">下載 CSV</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted">還沒有任何課堂紀錄。</p>
+  {% endif %}
+</section>
+{% endblock %}
