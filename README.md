@@ -39,10 +39,32 @@
 ```bash
 pip install -r requirements.txt
 cp config.example.yaml config.yaml   # 修改 camera.source 為教室監視器的 RTSP 網址
+python -m the_vision.tools.fetch_models   # 下載模型 (只需一次)
 python -m the_vision                 # 開啟 http://localhost:8000
 ```
 
-第一次辨識時會自動下載 YOLO 模型 (約 25 MB)。
+## 完全離線運作
+
+系統**不使用任何雲端 API**：影像辨識在本機執行，網頁介面也不載入外部資源，畫面不會離開學校。
+預設為離線模式 (`detector.offline: true`)，會關閉 ultralytics 的連網檢查與使用統計回傳，也不會自動下載模型。
+
+只有「準備安裝檔」這一步需要網路，可以在任何一台有網路的電腦上完成：
+
+```bash
+# 在有網路的電腦 (需與教室電腦相同作業系統與 Python 版本)
+python -m the_vision.tools.fetch_models          # 下載模型到 models/ (約 25 MB)
+pip download -r requirements.txt -d wheels      # 下載所有 Python 套件 (含 torch，約 1~3 GB)
+```
+
+把整個專案資料夾 (含 `models/` 與 `wheels/`) 用隨身碟複製到教室電腦後：
+
+```bash
+pip install --no-index --find-links wheels -r requirements.txt
+python -m the_vision
+```
+
+之後教室電腦即可拔掉對外網路，只需要能連到監視器 (同一個區域網路) 即可。
+這個流程已在完全沒有網路介面的環境中驗證過：模型載入、辨識、整堂課的監看與報表都能正常運作，且沒有任何連網嘗試。
 
 ## 使用流程
 

@@ -8,6 +8,8 @@
 
 from __future__ import annotations
 
+import os
+from pathlib import Path
 from typing import Protocol
 
 import numpy as np
@@ -20,13 +22,37 @@ class Detector(Protocol):
     def detect(self, frame: np.ndarray) -> FrameDetections: ...
 
 
+class ModelMissingError(RuntimeError):
+    pass
+
+
+def configure_offline() -> None:
+    """關閉 ultralytics 的連網檢查與使用統計回傳。必須在第一次 import ultralytics 之前呼叫才完全有效。"""
+    os.environ["YOLO_OFFLINE"] = "1"
+    from ultralytics.utils import SETTINGS
+
+    if SETTINGS.get("sync"):
+        SETTINGS.update({"sync": False})
+
+
+def resolve_model(path: str, offline: bool) -> str:
+    if Path(path).exists() or not offline:
+        return path  # 非離線模式下，找不到的模型交給 ultralytics 自動下載
+    raise ModelMissingError(
+        f"找不到模型檔 {path}。離線模式不會自動下載，請在有網路的電腦執行 "
+        f"`python -m the_vision.tools.fetch_models`，再把 models/ 資料夾複製到這台電腦。"
+    )
+
+
 class YoloDetector:
     def __init__(self, cfg: DetectorConfig):
+        if cfg.offline:
+            configure_offline()
         from ultralytics import YOLO  # 延遲載入，讓沒有安裝 torch 的環境也能跑設定介面與測試
 
         self.cfg = cfg
-        self.pose = YOLO(cfg.pose_model)
-        self.objects = YOLO(cfg.object_model)
+        self.pose = YOLO(resolve_model(cfg.pose_model, cfg.offline))
+        self.objects = YOLO(resolve_model(cfg.object_model, cfg.offline))
         names = self.objects.names
         self.class_ids = [i for i, n in names.items() if n in cfg.object_classes]
 

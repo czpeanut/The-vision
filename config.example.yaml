@@ -7,8 +7,9 @@ camera:
   burst_interval_sec: 0.4
 
 detector:
-  pose_model: yolo11n-pose.pt   # 有 GPU 可改 yolo11m-pose.pt 提高準確度
-  object_model: yolo11s.pt
+  pose_model: models/yolo11n-pose.pt   # 有 GPU 可改 yolo11m-pose.pt 提高準確度
+  object_model: models/yolo11s.pt
+  offline: true                        # 完全不連網；模型需先用 fetch_models 下載
   device: ""                    # "" 自動 / "cpu" / "0"
   img_size: 1280
 

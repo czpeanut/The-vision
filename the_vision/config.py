@@ -20,8 +20,11 @@ class CameraConfig:
 
 @dataclass
 class DetectorConfig:
-    pose_model: str = "yolo11n-pose.pt"   # 人體姿態 (17 個關鍵點)
-    object_model: str = "yolo11s.pt"      # 物件偵測 (手機 / 書 / 筆電)
+    pose_model: str = "models/yolo11n-pose.pt"   # 人體姿態 (17 個關鍵點)
+    object_model: str = "models/yolo11s.pt"      # 物件偵測 (手機 / 書 / 筆電)
+    # 離線模式：不連網檢查、不回傳使用統計、不自動下載模型。
+    # 模型請先用 `python -m the_vision.tools.fetch_models` 下載到 models/
+    offline: bool = True
     device: str = ""                      # "" 自動、"cpu"、"0" (第一張 GPU)
     img_size: int = 1280                  # 教室全景人很小，建議用較大的輸入尺寸
     person_conf: float = 0.35

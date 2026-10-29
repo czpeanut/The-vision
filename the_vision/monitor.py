@@ -63,6 +63,7 @@ class Monitor:
             raise RuntimeError("已有課堂正在監看中")
         if not layout.seats:
             raise ValueError("請先框選學生座位")
+        self.detector()  # 先載入模型，缺模型檔時立即回報錯誤
         self.layout = layout
         self.session_id = self.store.start_session(title, layout)
         self.latest = None
